@@ -1,5 +1,5 @@
 interface ITeam {
-  id: number;
+  readonly id: number;
   teamName: string;
 }
 
