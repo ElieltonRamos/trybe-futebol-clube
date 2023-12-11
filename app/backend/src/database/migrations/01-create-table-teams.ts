@@ -1,9 +1,13 @@
 import { Model, QueryInterface, DataTypes } from 'sequelize';
 import ITeam from '../../Interfaces/ITeam';
 
+interface ITeamMigration extends Omit<ITeam, 'teamName'> {
+  team_Name: string;
+}
+
 export default {
   up(queryInterface: QueryInterface) {
-    return queryInterface.createTable<Model>('teams', {
+    return queryInterface.createTable<Model<ITeamMigration>>('teams', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
