@@ -1,10 +1,10 @@
-import { CreationOptional, DataTypes, Model } from 'sequelize';
+import { DataTypes, Model } from 'sequelize';
 import IMatches from '../../Interfaces/IMatches';
 import db from '.';
 import TeamsModel from './SequelizeTeamsModel';
 
 class SequelizeMatchesModel extends Model<IMatches> {
-  declare id: CreationOptional<number>;
+  declare readonly id: number;
   declare homeTeamId: number;
   declare homeTeamGoals: number;
   declare awayTeamId: number;
