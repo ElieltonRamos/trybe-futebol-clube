@@ -7,9 +7,9 @@ class TeamsControllers {
     private teamsService = new TeamsService(),
   ) { }
 
-  getAllTeams(req: Request, res: Response) {
+  async getAllTeams(req: Request, res: Response) {
     try {
-      const { status, data } = this.teamsService.listAllTeams();
+      const { status, data } = await this.teamsService.listAllTeams();
       res.status(mapStatusHTTP(status)).send(data);
     } catch (erro) {
       console.log(erro);

@@ -1,3 +1,4 @@
+import ITeam, { ITeamModel } from '../Interfaces/ITeam';
 import { StatusHTTP } from '../utils/mapStatusHTPP';
 import TeamsModel from '../models/teams.models';
 
@@ -11,8 +12,9 @@ class TeamsService {
     private TeamModel: ITeamModel = new TeamsModel(),
   ) { }
 
-  listAllTeams(): ServiceResponse<string> {
-    return { status: 'ok', data: 'vo faze ainda' };
+  async listAllTeams(): Promise<ServiceResponse<ITeam[]>> {
+    const resDB = await this.TeamModel.findAll();
+    return { status: 'ok', data: resDB };
   }
 }
 
