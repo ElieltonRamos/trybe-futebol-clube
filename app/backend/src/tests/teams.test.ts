@@ -26,4 +26,23 @@ describe('Rotas relacionada aos times', () => {
     expect(status).to.be.equal(200)
     expect(body).to.be.deep.equal(mockTeams)
   });
+
+  it('Rota "/teams/:id" deve retornar um unico time', async function () {
+    const teams = TeamsModel.build(mockTeams[0]);
+    sinon.stub(TeamsModel, 'findByPk').resolves(teams);
+
+    const { status, body } = await chai.request(app).get('/teams/1')
+
+    expect(status).to.be.equal(200)
+    expect(body).to.be.deep.equal(mockTeams[0])
+  });
+
+  it('Rota "/teams/:id" deve retornar not found caso time nao seja encontrado', async function () {
+    sinon.stub(TeamsModel, 'findByPk').resolves(null);
+
+    const { status, body } = await chai.request(app).get('/teams/99999999')
+
+    expect(status).to.be.equal(404)
+    expect(body).to.be.deep.equal({ message: 'team not found' });
+  });
 });
