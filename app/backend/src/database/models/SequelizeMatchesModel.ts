@@ -5,6 +5,7 @@ import TeamsModel from './SequelizeTeamsModel';
 
 class SequelizeMatchesModel extends Model<IMatches> {
   declare readonly id: number;
+  // declare id: CreationOptional<number>; caso ocorra erro na criacao de entidades
   declare homeTeamId: number;
   declare homeTeamGoals: number;
   declare awayTeamId: number;
