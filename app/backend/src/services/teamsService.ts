@@ -1,5 +1,5 @@
 import ITeam, { ITeamModel } from '../Interfaces/ITeam';
-import TeamsModel from '../models/teamsModels';
+import TeamsModel from '../models/teamsModel';
 import { ServiceResponse } from '../Interfaces/IServicesResponse';
 
 class TeamsService {
