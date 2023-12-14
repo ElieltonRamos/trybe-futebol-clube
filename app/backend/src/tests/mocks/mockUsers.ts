@@ -1,15 +1,17 @@
 const mockUsersValids = [
     {
+      id: 1,
       username: 'Admin',
       role: 'admin',
       email: 'admin@admin.com',
-      password: 'secret_admin'
+      password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW'
     },
     {
+      id: 2,
       username: 'User',
       role: 'user',
       email: 'user@user.com',
-      password: 'secret_user', 
+      password: '$2a$08$Y8Abi8jXvsXyqm.rmp0B.uQBA5qUz7T6Ghlg/CvVr/gLxYj5UAZVO', 
     },
 ]
 
@@ -18,13 +20,13 @@ export const mockUsersInvalids = [
     username: 'invalidUserEmail',
     role: 'invalidUserEmail',
     email: '@user.com',
-    password: 'secret_user', 
+    password: '$2a$08$Y8Abi8jXvsXyqm.rmp0B.uQBA5qUz7T6Ghlg/CvVr/gLxYj5UAZVO', 
   },
   {
     username: 'invalidUserPassword',
     role: 'invalidUserPassword',
     email: 'invalidUser@email.com',
-    password: 'secret_userIncorret', 
+    password: '$2a$10$HDkFwOMKOI6PTza0F7.YRu1Bqsqb9hx7XkuV7QeYB5dRL4z9DI1Mu', 
   },
 ]
 

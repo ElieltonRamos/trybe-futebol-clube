@@ -10,11 +10,14 @@ class LoginService {
 
   async validateUser(password: string, email: string) {
     const user = await this.model.findByEmail(email);
+    if (!user) return false;
     const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (!user || !regexEmail.test(email)) return false;
-    const passwordValid = password.length < 6 || !compareSync(password, user.password);
-    if (passwordValid) return false;
-    return user;
+    switch (true) {
+      case password.length < 6: return false;
+      case !regexEmail.test(email): return false;
+      case !compareSync(password, user.password): return false;
+      default: return user;
+    }
   }
 
   async login(email: string, password: string): Promise<ServiceResponse<{ token: string }>> {
