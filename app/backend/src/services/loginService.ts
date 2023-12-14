@@ -9,12 +9,12 @@ class LoginService {
   ) { }
 
   async login(email: string, password: string): Promise<ServiceResponse<{ token: string }>> {
-    console.log('email', email, 'senha', password);
     if (!email || !password) {
       return { status: 'badRequest', data: { message: 'All fields must be filled' } };
     }
     const user = await this.model.findByEmail(email);
-    if (user === null || !compareSync(password, user.password)) {
+    const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (user === null || !compareSync(password, user.password) || !regexEmail.test(email) || password.length < 6) {
       return { status: 'unauthorized', data: { message: 'Invalid email or password' } };
     }
     const token = JsonWebToken.generateToken({ id: user.id, userName: user.username });
