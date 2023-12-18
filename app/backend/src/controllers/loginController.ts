@@ -17,6 +17,16 @@ class LoginControllers {
       return res.status(mapStatusHTTP('serverError')).send('Internal Server Error');
     }
   }
+
+  role = (req: Request, res: Response) => {
+    try {
+      const { user } = req.body;
+      return res.status(mapStatusHTTP('ok')).send({ role: user.role });
+    } catch (error) {
+      console.log(error);
+      return res.status(mapStatusHTTP('serverError')).send('Internal Server Error');
+    }
+  };
 }
 
 export default LoginControllers;

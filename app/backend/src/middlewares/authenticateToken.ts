@@ -7,13 +7,14 @@ class authenticateToken {
 
     if (!authorization) return res.status(401).send({ message: 'Token not found' });
 
-    const decoded = JsonWebToken.verifyToken(authorization);
+    const token = authorization.split(' ')[1];
+    const userAuthenticate = JsonWebToken.verifyToken(token);
 
-    if (decoded === 'Token Invalido') {
+    if (userAuthenticate === 'Token Invalido') {
       return res.status(401).send({ message: 'Token must be a valid token' });
     }
 
-    req.body.user = decoded;
+    req.body.user = userAuthenticate;
     next();
   }
 }
