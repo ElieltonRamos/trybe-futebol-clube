@@ -2,9 +2,10 @@ import { sign, verify } from 'jsonwebtoken';
 
 const secretKey = process.env.SECRET || 'secret';
 
-interface Payload {
+export interface Payload {
   id: number;
   userName: string;
+  role: string;
 }
 
 class JsonWebToken {

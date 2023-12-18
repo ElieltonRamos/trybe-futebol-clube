@@ -1,7 +1,7 @@
 import { compareSync } from 'bcryptjs';
 import UsersModel from '../models/usersModel';
 import { ServiceResponse } from '../Interfaces/IServicesResponse';
-import JsonWebToken from '../utils/jsonWebToken';
+import JsonWebToken, { Payload } from '../utils/jsonWebToken';
 
 class LoginService {
   constructor(
@@ -28,7 +28,11 @@ class LoginService {
     if (!validUser) {
       return { status: 'unauthorized', data: { message: 'Invalid email or password' } };
     }
-    const token = JsonWebToken.generateToken({ id: validUser.id, userName: validUser.username });
+    const payload: Payload = {
+      id: validUser.id,
+      userName: validUser.username,
+      role: validUser.role };
+    const token = JsonWebToken.generateToken(payload);
     return { status: 'ok', data: { token } };
   }
 }
