@@ -14,7 +14,7 @@ const { expect } = chai;
 
 describe('Rotas relacionada ao login', () => {
   beforeEach(function () {
-    sinon.restore()
+    sinon.restore();
   })
 
   it('Rota "/login" deve retornar um token com sucesso', async function () {
@@ -24,10 +24,10 @@ describe('Rotas relacionada ao login', () => {
 
     const { status, body } = await chai.request(app)
       .post('/login')
-      .send({ email, password: 'secret_admin' })
+      .send({ email, password: 'secret_admin' });
 
-    expect(status).to.be.equal(200)
-    expect(body).to.be.have.property('token')
+    expect(status).to.be.equal(200);
+    expect(body).to.be.have.property('token');
   });
 
   it('Rota "/login" deve retornar um erro caso informacões sejão invalidas', async function () {
@@ -36,9 +36,9 @@ describe('Rotas relacionada ao login', () => {
 
     const { status, body } = await chai.request(app)
       .post('/login')
-      .send({ email, password: 'secret_admin' })
+      .send({ email, password: 'secret_admin' });
 
-    expect(status).to.be.equal(401)
+    expect(status).to.be.equal(401);
     expect(body).to.be.deep.equal({ message: 'Invalid email or password' });
   });
 
@@ -48,10 +48,10 @@ describe('Rotas relacionada ao login', () => {
 
     const { status, body } = await chai.request(app)
       .post('/login')
-      .send({ email, password: '' })
+      .send({ email, password: '' });
 
-    expect(status).to.be.equal(400)
-    expect(body).to.be.deep.equal({ message: 'All fields must be filled' })
+    expect(status).to.be.equal(400);
+    expect(body).to.be.deep.equal({ message: 'All fields must be filled' });
   });
 
   it('Rota "/login" deve informar caso nao receba o email', async function () {
@@ -59,10 +59,10 @@ describe('Rotas relacionada ao login', () => {
 
     const { status, body } = await chai.request(app)
       .post('/login')
-      .send({ email: '', password: 'secret_admin' })
+      .send({ email: '', password: 'secret_admin' });
 
-    expect(status).to.be.equal(400)
-    expect(body).to.be.deep.equal({ message: 'All fields must be filled' })
+    expect(status).to.be.equal(400);
+    expect(body).to.be.deep.equal({ message: 'All fields must be filled' });
   });
 
   it('Rota "/login/role" deve retornar a role do user', async function () {
@@ -79,6 +79,6 @@ describe('Rotas relacionada ao login', () => {
       .set({ authorization: `Bearer ${body.token}` });
 
     expect(requestRole.status).to.be.equal(200);
-    expect(requestRole.body).to.be.deep.equal({ role })
+    expect(requestRole.body).to.be.deep.equal({ role });
   });
 });

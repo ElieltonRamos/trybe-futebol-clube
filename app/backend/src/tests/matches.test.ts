@@ -21,8 +21,7 @@ describe('Rotas relacionadas a matches', function () {
     sinon.stub(matchesModel, 'findAll').resolves(allMatches);
 
     const { status, body } = await chai.request(app)
-      .get('/matches')
-      .end();
+      .get('/matches');
 
     expect(body).to.been.deep.equal(matchesMock);
     expect(status).to.be.equal(200);
