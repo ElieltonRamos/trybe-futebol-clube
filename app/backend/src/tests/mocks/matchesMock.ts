@@ -7,9 +7,11 @@ const matchesMock = [
     awayTeamGoals: 1,
     inProgress: false,
     homeTeam: {
+      id: 16,
       teamName: 'São Paulo'
     },
     awayTeam: {
+      id: 8,
       teamName: 'Grêmio'
     }
   },
@@ -21,9 +23,11 @@ const matchesMock = [
     awayTeamGoals: 0,
     inProgress: true,
     homeTeam: {
+      id: 16,
       teamName: 'São Paulo'
     },
     awayTeam: {
+      id: 9,
       teamName: 'Internacional'
     }
   }

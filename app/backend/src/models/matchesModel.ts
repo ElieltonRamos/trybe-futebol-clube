@@ -11,7 +11,12 @@ class MatchesModel implements IMatchesModel {
   }
 
   async findAll(): Promise<IMatches[]> {
-    const dbResponse = await this.model.findAll({ include: { model: SequelizeTeamsModel } });
+    const dbResponse = await this.model.findAll({
+      include: [
+        { model: SequelizeTeamsModel, as: 'homeTeam', attributes: ['teamName'] },
+        { model: SequelizeTeamsModel, as: 'awayTeam', attributes: ['teamName'] }],
+      attributes: { exclude: ['home_team_id', 'away_team_id'] },
+    });
     const allMatches = dbResponse.map((matche) => matche.dataValues);
     return allMatches;
   }
