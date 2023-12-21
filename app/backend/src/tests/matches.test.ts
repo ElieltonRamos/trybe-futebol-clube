@@ -31,4 +31,18 @@ describe('Rotas relacionadas a matches', function () {
     expect(body).to.deep.equal(matchesMock);
     expect(status).to.be.equal(200);
   })
+
+  it('"/matches" deve retornar as partidas com filtro', async function () {
+    const allMatches = matchesModel.bulkBuild(matchesMock, {
+      include: [
+        { model: SequelizeTeamsModel, as: 'homeTeam' },
+        { model: SequelizeTeamsModel, as: 'awayTeam' }
+      ]});
+    sinon.stub(matchesModel, 'findAll').resolves(allMatches);
+
+    const { status, body } = await chai.request(app)
+      .get('/matches?inProgress=true');
+    expect(body).to.deep.equal([matchesMock[1]]);
+    expect(status).to.be.equal(200);
+  })
 })
