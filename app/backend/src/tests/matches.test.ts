@@ -6,7 +6,7 @@ import chaiHttp = require('chai-http');
 import { app } from '../app';
 import matchesModel from '../database/models/SequelizeMatchesModel';
 
-import matchesMock from './mocks/matchesMock';
+import matchesMock, { mockMatchUpdateTest } from './mocks/matchesMock';
 import { token } from './mocks/usersMock';
 import SequelizeTeamsModel from '../database/models/SequelizeTeamsModel';
 
@@ -60,6 +60,24 @@ describe('Rotas relacionadas a matches', function () {
       .set({ authorization: token });
 
     expect(body).to.deep.equal({ message: 'Finished' });
+    expect(status).to.be.equal(200);
+  })
+
+  it('"/matches/:id" deve atualizar uma partida com sucesso', async function () {
+    const awayTeamGoals = 1;
+    const homeTeamGoals = 3;
+    const matchUpdated = { ...mockMatchUpdateTest, homeTeamGoals, awayTeamGoals }
+    sinon.stub(matchesModel, 'findByPk')
+      .onFirstCall().resolves(matchesModel.build(mockMatchUpdateTest))
+      .onSecondCall().resolves(matchesModel.build(matchUpdated))
+    sinon.stub(matchesModel, 'update').resolves([1])
+
+    const { status, body } = await chai.request(app)
+      .patch('/matches/41')
+      .set({ authorization: token })
+      .send({ awayTeamGoals, homeTeamGoals });
+      
+    expect(body).to.deep.equal(matchUpdated);
     expect(status).to.be.equal(200);
   })
 })
