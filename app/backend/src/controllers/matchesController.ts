@@ -9,7 +9,8 @@ class MatchesControllers {
 
   async getAllMatches(req: Request, res: Response) {
     try {
-      const { status, data } = await this.matchesService.listAllMatches();
+      const { inProgress } = req.query;
+      const { status, data } = await this.matchesService.listAllMatches(inProgress);
       res.status(mapStatusHTTP(status)).send(data);
     } catch (erro) {
       console.log(erro);

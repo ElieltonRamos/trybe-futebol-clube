@@ -7,8 +7,12 @@ class MatchesService {
     private matchesModel = new MatchesModels(),
   ) { }
 
-  async listAllMatches(): Promise<ServiceResponse<IMatches[]>> {
+  async listAllMatches(inProgress: unknown): Promise<ServiceResponse<IMatches[]>> {
     const allMatches = await this.matchesModel.findAll();
+    if (inProgress === 'true') {
+      const filteredMatchs = allMatches.filter((match) => match.inProgress);
+      return { status: 'ok', data: filteredMatchs };
+    }
     return { status: 'ok', data: allMatches };
   }
 }
