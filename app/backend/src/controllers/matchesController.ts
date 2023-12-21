@@ -17,6 +17,17 @@ class MatchesControllers {
       res.status(mapStatusHTTP('serverError')).send('Internal Server Error');
     }
   }
+
+  async finishMatch(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { status, data } = await this.matchesService.finishMatch(Number(id));
+      res.status(mapStatusHTTP(status)).send(data);
+    } catch (erro) {
+      console.log(erro);
+      res.status(mapStatusHTTP('serverError')).send('Internal Server Error');
+    }
+  }
 }
 
 export default MatchesControllers;

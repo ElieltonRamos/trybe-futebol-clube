@@ -19,6 +19,16 @@ class MatchesService {
     }
     return { status: 'ok', data: allMatches };
   }
+
+  async finishMatch(id: number): Promise<ServiceResponse<{ message: string }>> {
+    const match = await this.matchesModel.findById(id);
+    if (!match) return { status: 'notFound', data: { message: 'match not found' } };
+
+    const matchUpdated = { ...match, inProgress: false };
+    await this.matchesModel.update(id, matchUpdated);
+
+    return { status: 'ok', data: { message: 'Finished' } };
+  }
 }
 
 export default MatchesService;
