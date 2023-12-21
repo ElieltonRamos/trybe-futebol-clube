@@ -29,6 +29,19 @@ class MatchesService {
 
     return { status: 'ok', data: { message: 'Finished' } };
   }
+
+  async updateMatch(id: number, homeTeamGoals: number, awayTeamGoals: number):
+  Promise<ServiceResponse<IMatches>> {
+    const match = await this.matchesModel.findById(id);
+    if (!match) return { status: 'notFound', data: { message: 'match not found' } };
+
+    const matchUpdated = { ...match, homeTeamGoals, awayTeamGoals };
+    const resultUpdated = await this.matchesModel.update(id, matchUpdated);
+
+    if (!resultUpdated) return { status: 'serverError', data: { message: 'Internal Error' } };
+
+    return { status: 'ok', data: resultUpdated };
+  }
 }
 
 export default MatchesService;

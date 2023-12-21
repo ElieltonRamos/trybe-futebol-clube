@@ -9,6 +9,12 @@ const MatchesController = new MatchesControllers();
 matchesRouter.get('/', (req: Request, res: Response) => MatchesController.getAllMatches(req, res));
 
 matchesRouter.patch(
+  '/:id',
+  (req: Request, res: Response, n: NextFunction) => authenticateToken.verifyToken(req, res, n),
+  (req: Request, res: Response) => MatchesController.updateMatch(req, res),
+);
+
+matchesRouter.patch(
   '/:id/finish',
   (req: Request, res: Response, n: NextFunction) => authenticateToken.verifyToken(req, res, n),
   (req: Request, res: Response) => MatchesController.finishMatch(req, res),

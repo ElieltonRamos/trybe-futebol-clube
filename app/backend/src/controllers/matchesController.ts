@@ -5,6 +5,7 @@ import mapStatusHTTP from '../utils/mapStatusHTPP';
 class MatchesControllers {
   constructor(
     private matchesService = new MatchesService(),
+    private internalError = 'Internal Server Error',
   ) { }
 
   async getAllMatches(req: Request, res: Response) {
@@ -14,7 +15,7 @@ class MatchesControllers {
       res.status(mapStatusHTTP(status)).send(data);
     } catch (erro) {
       console.log(erro);
-      res.status(mapStatusHTTP('serverError')).send('Internal Server Error');
+      res.status(mapStatusHTTP('serverError')).send(this.internalError);
     }
   }
 
@@ -25,7 +26,20 @@ class MatchesControllers {
       res.status(mapStatusHTTP(status)).send(data);
     } catch (erro) {
       console.log(erro);
-      res.status(mapStatusHTTP('serverError')).send('Internal Server Error');
+      res.status(mapStatusHTTP('serverError')).send(this.internalError);
+    }
+  }
+
+  async updateMatch(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { homeTeamGoals, awayTeamGoals } = req.body;
+      const { status, data } = await this.matchesService
+        .updateMatch(Number(id), homeTeamGoals, awayTeamGoals);
+      res.status(mapStatusHTTP(status)).send(data);
+    } catch (erro) {
+      console.log(erro);
+      res.status(mapStatusHTTP('serverError')).send(this.internalError);
     }
   }
 }
