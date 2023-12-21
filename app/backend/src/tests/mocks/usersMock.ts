@@ -30,4 +30,6 @@ export const mockUsersInvalids = [
   },
 ]
 
+export const token = 'Baerer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlck5hbWUiOiJVc2VyIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3MDMxNzEzMjR9.y2SmXCeanMiyNSLY8K6tVoZdA2-CjYOalC3W7zuo3WY'
+
 export default mockUsersValids;
