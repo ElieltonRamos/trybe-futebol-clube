@@ -13,6 +13,10 @@ class MatchesService {
       const filteredMatchs = allMatches.filter((match) => match.inProgress);
       return { status: 'ok', data: filteredMatchs };
     }
+    if (inProgress === 'false') {
+      const filteredMatchs = allMatches.filter((match) => match.inProgress === false);
+      return { status: 'ok', data: filteredMatchs };
+    }
     return { status: 'ok', data: allMatches };
   }
 }
