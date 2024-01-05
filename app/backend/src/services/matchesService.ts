@@ -4,13 +4,6 @@ import { ServiceResponse } from '../Interfaces/IServicesResponse';
 import MatchesModels from '../models/matchesModel';
 import ITeam from '../Interfaces/ITeam';
 
-type IMatch = {
-  homeTeam: string,
-  awayTeam: string,
-  homeGoals: number,
-  awayGoals: number
-};
-
 type ValidTeams = {
   homeTeam: ITeam,
   awayTeam: ITeam,
@@ -58,15 +51,15 @@ class MatchesService {
     return { status: 'ok', data: resultUpdated };
   }
 
-  async createMatch(data: IMatch): Promise<ServiceResponse<IMatches | string>> {
+  async createMatch(data: IMatches): Promise<ServiceResponse<IMatches | string>> {
     const matchValid = await this.validateMatch(data);
 
     if ('status' in matchValid) return matchValid;
 
     const infoMatch = {
       inProgress: true,
-      awayTeamGoals: data.awayGoals,
-      homeTeamGoals: data.awayGoals,
+      awayTeamGoals: data.awayTeamGoals,
+      homeTeamGoals: data.homeTeamGoals,
       awayTeamId: matchValid.awayTeam.id,
       homeTeamId: matchValid.homeTeam.id,
     };
@@ -75,13 +68,12 @@ class MatchesService {
     return { status: 'created', data: newMatch };
   }
 
-  async validateMatch(data: IMatch): Promise<ServiceResponse<string> | ValidTeams> {
+  async validateMatch(data: IMatches): Promise<ServiceResponse<string> | ValidTeams> {
     // const fieldsValids = this.requiredFields(data);
     // if (fieldsValids !== 'valid') return fieldsValids;
 
-    const allTeams = await this.teamModel.findAll();
-    const homeTeam = allTeams.find((team) => team.teamName === data.homeTeam);
-    const awayTeam = allTeams.find((team) => team.teamName === data.awayTeam);
+    const homeTeam = this.teamModel.findById(data.homeTeamId);
+    const awayTeam = this.teamModel.findById(data.awayTeamId);
 
     if (!homeTeam || !awayTeam) {
       return {
