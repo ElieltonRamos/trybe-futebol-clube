@@ -42,6 +42,16 @@ class MatchesControllers {
       res.status(mapStatusHTTP('serverError')).send(this.internalError);
     }
   }
+
+  async createMatch(req: Request, res: Response) {
+    try {
+      const { status, data } = await this.matchesService.createMatch(req.body);
+      res.status(mapStatusHTTP(status)).send(data);
+    } catch (erro) {
+      console.log(erro);
+      res.status(mapStatusHTTP('serverError')).send(this.internalError);
+    }
+  }
 }
 
 export default MatchesControllers;

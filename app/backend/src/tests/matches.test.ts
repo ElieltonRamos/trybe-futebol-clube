@@ -76,8 +76,28 @@ describe('Rotas relacionadas a matches', function () {
       .patch('/matches/41')
       .set({ authorization: token })
       .send({ awayTeamGoals, homeTeamGoals });
-      
+
     expect(body).to.deep.equal(matchUpdated);
     expect(status).to.be.equal(200);
+  })
+
+  it.only('"/matches" deve cadastrar uma partida com sucesso', async function () {
+    const infoMatch = {
+      homeTeamId: 16, 
+      awayTeamId: 8,
+      homeTeamGoals: 2,
+      awayTeamGoals: 2
+    }
+    const newMatch = { id: 1, inProgress: true, ...infoMatch }
+    const mockCreateMatch = matchesModel.build(newMatch)
+    sinon.stub(matchesModel, 'create').resolves(mockCreateMatch)
+
+    const { status, body } = await chai.request(app)
+      .post('/matches')
+      .set({ authorization: token })
+      .send(infoMatch);
+
+    expect(body).to.deep.equal(newMatch);
+    expect(status).to.be.equal(201);
   })
 })

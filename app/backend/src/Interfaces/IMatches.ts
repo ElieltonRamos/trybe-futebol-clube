@@ -1,7 +1,7 @@
 import { ICRUDModel } from './ICRUD';
 
 export default interface IMatches {
-  readonly id: number;
+  id?: number;
   homeTeamId: number;
   homeTeamGoals: number;
   awayTeamId: number;
