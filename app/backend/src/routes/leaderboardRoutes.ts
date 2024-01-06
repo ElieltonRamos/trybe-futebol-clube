@@ -1,14 +1,13 @@
-// import { Request, Response, Router } from 'express';
-// import leaderboardController from '../controllers/loginController';
-// import authenticateToken from '../middlewares/authenticateToken';
+import { Request, Response, Router } from 'express';
+import LeaderboardController from '../controllers/leaderboardController';
 
-// const leaderboardRouter = Router();
+const leaderboardRouter = Router();
 
-// const leaderboardControllers = new leaderboardController();
+const leaderboardControllers = new LeaderboardController();
 
-// leaderboardRouter.post(
-//   '/home',
-//   (req: Request, res: Response) => leaderboardControllers.login(req, res),
-// );
+leaderboardRouter.get(
+  '/home',
+  (req: Request, res: Response) => leaderboardControllers.leaderboardSearchHome(req, res),
+);
 
-// export default leaderboardRouter;
+export default leaderboardRouter;
