@@ -72,8 +72,8 @@ class MatchesService {
     // const fieldsValids = this.requiredFields(data);
     // if (fieldsValids !== 'valid') return fieldsValids;
 
-    const homeTeam = this.teamModel.findById(data.homeTeamId);
-    const awayTeam = this.teamModel.findById(data.awayTeamId);
+    const homeTeam = await this.teamModel.findById(data.homeTeamId);
+    const awayTeam = await this.teamModel.findById(data.awayTeamId);
 
     if (!homeTeam || !awayTeam) {
       return {
@@ -82,7 +82,7 @@ class MatchesService {
       };
     }
 
-    if (homeTeam === awayTeam) {
+    if (homeTeam.id === awayTeam.id) {
       return {
         status: 'unprocessableEntity',
         data: { message: 'It is not possible to create a match with two equal teams' },
@@ -92,8 +92,8 @@ class MatchesService {
     return { homeTeam, awayTeam };
   }
 
-  requiredFields = (data: IMatch): ServiceResponse<string> | 'valid' => {
-    const propertiesNecessary = ['homeTeam', 'awayTeam', 'homeGoals', 'awayGoals'];
+  requiredFields = (data: IMatches): ServiceResponse<string> | 'valid' => {
+    const propertiesNecessary = ['homeTeamId', 'awayTeamId', 'homeTeamGoals', 'awayTeamGoals'];
     const dataValid = propertiesNecessary.every((property) => property in data);
 
     if (!dataValid) return { status: 'badRequest', data: { message: 'All fields are required' } };

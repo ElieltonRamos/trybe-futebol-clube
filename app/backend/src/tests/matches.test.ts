@@ -81,7 +81,7 @@ describe('Rotas relacionadas a matches', function () {
     expect(status).to.be.equal(200);
   })
 
-  it.only('"/matches" deve cadastrar uma partida com sucesso', async function () {
+  it('"/matches" deve cadastrar uma partida com sucesso', async function () {
     const infoMatch = {
       homeTeamId: 16, 
       awayTeamId: 8,
