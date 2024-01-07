@@ -9,7 +9,7 @@ class leaderboardController {
 
   async leaderboardSearchHome(req: Request, res: Response) {
     try {
-      const { status, data } = await this.leaderboardService.leaderboardSearchHome();
+      const { status, data } = await this.leaderboardService.searchLeaderboardHome();
       return res.status(mapStatusHTTP(status)).send(data);
     } catch (erro) {
       console.log(erro);

@@ -1,6 +1,6 @@
 import SequelizeTeamsModel from '../database/models/SequelizeTeamsModel';
 import SequelizeMatchesModel from '../database/models/SequelizeMatchesModel';
-import IMatches, { IMatchesModel } from '../Interfaces/IMatches';
+import IMatches, { IMatchWithTeamNames, IMatchesModel } from '../Interfaces/IMatches';
 
 class MatchesModel implements IMatchesModel {
   private model = SequelizeMatchesModel;
@@ -10,15 +10,16 @@ class MatchesModel implements IMatchesModel {
     return resDB.dataValues;
   }
 
-  async findAll(): Promise<IMatches[]> {
+  async findAll(): Promise<IMatchWithTeamNames[]> {
     const dbResponse = await this.model.findAll({
       include: [
         { model: SequelizeTeamsModel, as: 'homeTeam', attributes: ['teamName'] },
         { model: SequelizeTeamsModel, as: 'awayTeam', attributes: ['teamName'] }],
       attributes: { exclude: ['home_team_id', 'away_team_id'] },
     });
-    const allMatches = dbResponse.map((matche) => matche.dataValues);
-    return allMatches;
+    const allMatches = dbResponse.map((matche) => matche.dataValues) as unknown;
+    const allMatchesTeamsNames = allMatches as IMatchWithTeamNames[];
+    return allMatchesTeamsNames;
   }
 
   async findById(id: number): Promise<IMatches | null> {

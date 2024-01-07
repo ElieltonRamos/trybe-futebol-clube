@@ -10,3 +10,12 @@ export default interface IMatches {
 }
 
 export type IMatchesModel = ICRUDModel<IMatches>;
+
+export interface IMatchWithTeamNames extends IMatches {
+  homeTeam: {
+    teamName: string;
+  };
+  awayTeam: {
+    teamName: string;
+  };
+}

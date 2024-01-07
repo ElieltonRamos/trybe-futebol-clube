@@ -1,27 +1,22 @@
-// import IMatches from '../Interfaces/IMatches';
+import { calculateLeaderboardHome } from '../utils/calculateMatchResults';
+import { ILeaderboardHome } from '../Interfaces/ILeaderboard';
 import { ServiceResponse } from '../Interfaces/IServicesResponse';
-import LeadboardModel from '../models/leadboardModel';
-
-export type matchsTeamsHome = {
-  name: string;
-  totalPoints: number;
-  totalGames: number;
-  totalVictories: number;
-  totalDraws: number;
-  totalLosses: number;
-  goalsFavor: number;
-  goalsOwn: number;
-};
+import MatchesModel from '../models/matchesModel';
+import TeamsModel from '../models/teamsModel';
 
 class leaderboardService {
   constructor(
-    private leaderbordModel = new LeadboardModel(),
+    private matchsModel = new MatchesModel(),
+    private teamsModel = new TeamsModel(),
   ) { }
 
-  async leaderboardSearchHome(): Promise<ServiceResponse<matchsTeamsHome[]>> {
-    const matchsTeamsHome = await this.leaderbordModel.searchLeadboardHome();
+  async searchLeaderboardHome(): Promise<ServiceResponse<ILeaderboardHome[]>> {
+    const allMatches = await this.matchsModel.findAll();
+    const allTeams = await this.teamsModel.findAll();
 
-    return { status: 'ok', data: matchsTeamsHome };
+    const leadboardHome = calculateLeaderboardHome(allMatches, allTeams);
+
+    return { status: 'ok', data: leadboardHome };
   }
 }
 
