@@ -7,4 +7,5 @@ export type ILeaderboardHome = {
   totalLosses: number;
   goalsFavor: number;
   goalsOwn: number;
+  goalsBalance: number;
 };

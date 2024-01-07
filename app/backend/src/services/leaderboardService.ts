@@ -1,4 +1,4 @@
-import { calculateLeaderboardHome } from '../utils/calculateMatchResults';
+import { calculateLeaderboardHome, orderLeaderboard } from '../utils/calculateMatchResults';
 import { ILeaderboardHome } from '../Interfaces/ILeaderboard';
 import { ServiceResponse } from '../Interfaces/IServicesResponse';
 import MatchesModel from '../models/matchesModel';
@@ -12,11 +12,14 @@ class leaderboardService {
 
   async searchLeaderboardHome(): Promise<ServiceResponse<ILeaderboardHome[]>> {
     const allMatches = await this.matchsModel.findAll();
+    const matchesFinished = allMatches.filter((match) => match.inProgress === false);
     const allTeams = await this.teamsModel.findAll();
 
-    const leadboardHome = calculateLeaderboardHome(allMatches, allTeams);
+    const leadboardHome = calculateLeaderboardHome(matchesFinished, allTeams);
 
-    return { status: 'ok', data: leadboardHome };
+    const ordenedLeaderboard = orderLeaderboard(leadboardHome);
+
+    return { status: 'ok', data: ordenedLeaderboard };
   }
 }
 
