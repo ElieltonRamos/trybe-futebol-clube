@@ -46,7 +46,7 @@ describe('Rotas relacionadas a matches', function () {
     const { status, body } = await chai.request(app)
       .get('/matches?inProgress=true');
 
-    expect(body).to.deep.equal([matchesMock[1]]);
+    expect(body).to.deep.equal([matchesMock[1], matchesMock[2]]);
     expect(status).to.be.equal(200);
   })
 

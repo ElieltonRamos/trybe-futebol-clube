@@ -8,11 +8,11 @@ const matchesMock = [
     inProgress: false,
     homeTeam: {
       id: 16,
-      teamName: 'São Paulo'
+      teamName: 'Avaí/Kindermann'
     },
     awayTeam: {
       id: 8,
-      teamName: 'Grêmio'
+      teamName: 'Bahia'
     }
   },
   {
@@ -24,11 +24,27 @@ const matchesMock = [
     inProgress: true,
     homeTeam: {
       id: 16,
-      teamName: 'São Paulo'
+      teamName: 'Botafogo'
     },
     awayTeam: {
       id: 9,
-      teamName: 'Internacional'
+      teamName: 'Bahia'
+    }
+  },
+  {
+    id: 2,
+    homeTeamId: 16,
+    homeTeamGoals: 2,
+    awayTeamId: 9,
+    awayTeamGoals: 0,
+    inProgress: true,
+    homeTeam: {
+      id: 16,
+      teamName: 'Bahia'
+    },
+    awayTeam: {
+      id: 9,
+      teamName: 'Botafogo'
     }
   }
 ]
