@@ -49,7 +49,7 @@ export function calculateGoals(matchesIsSide: IMatchWithTeamNames[], matchTeamSi
 }
 
 export function calculateLeaderboard({ matchTeamSide, matches, teams }: InfosLeaderboard) {
-  const leadboardhome = teams.map((team) => {
+  return teams.map((team) => {
     const matchesIsSide = matches.filter((m) => m[matchTeamSide].teamName === team.teamName);
 
     const matchStatistic = matchStatistics(matchesIsSide, matchTeamSide);
@@ -69,8 +69,6 @@ export function calculateLeaderboard({ matchTeamSide, matches, teams }: InfosLea
       efficiency: matchStatistic.efficiency,
     };
   });
-
-  return leadboardhome;
 }
 
 export function orderLeaderboard(leadboardHome: ILeaderboard[]) {
