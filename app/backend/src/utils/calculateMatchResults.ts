@@ -1,11 +1,9 @@
-/* eslint-disable max-lines-per-function */
 import { IMatchWithTeamNames } from '../Interfaces/IMatches';
-import { ILeaderboard, InfosLeaderboard,
+import { ILeaderboard, InfoStatistics, InfosLeaderboard,
   MatchTeamSide, OptionsTeamsGoals } from '../Interfaces/ILeaderboard';
 
-export function matchStatistics(matchesSide: IMatchWithTeamNames[], matchTeamSide: MatchTeamSide) {
-  const teamsGoalsFavor = `${matchTeamSide}Goals` as OptionsTeamsGoals;
-  const teamsGoalsOwn = matchTeamSide === 'homeTeam' ? 'awayTeamGoals' : 'homeTeamGoals';
+export function calculatePoints(statistics: InfoStatistics) {
+  const { matchesSide, teamsGoalsFavor, teamsGoalsOwn } = statistics;
 
   let totalVictories = 0;
   let totalDraws = 0;
@@ -25,8 +23,18 @@ export function matchStatistics(matchesSide: IMatchWithTeamNames[], matchTeamSid
     return total + teamPoints;
   }, 0);
 
-  const efficiency = ((totalPoints / (matchesSide.length * 3)) * 100).toFixed(2);
-  return { totalVictories, totalDraws, totalLosses, totalPoints, efficiency };
+  return { totalVictories, totalDraws, totalLosses, totalPoints };
+}
+
+export function matchStatistics(matchesSide: IMatchWithTeamNames[], matchTeamSide: MatchTeamSide) {
+  const teamsGoalsFavor = `${matchTeamSide}Goals` as OptionsTeamsGoals;
+  const teamsGoalsOwn = matchTeamSide === 'homeTeam' ? 'awayTeamGoals' : 'homeTeamGoals';
+
+  const pointsCalculate = calculatePoints({ matchesSide, teamsGoalsFavor, teamsGoalsOwn });
+
+  const efficiency = ((pointsCalculate.totalPoints / (matchesSide.length * 3)) * 100).toFixed(2);
+
+  return { ...pointsCalculate, efficiency };
 }
 
 export function calculateGoals(matchesIsSide: IMatchWithTeamNames[], matchTeamSide: MatchTeamSide) {

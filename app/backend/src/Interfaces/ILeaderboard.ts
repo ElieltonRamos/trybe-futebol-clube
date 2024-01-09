@@ -22,3 +22,9 @@ export interface InfosLeaderboard {
 }
 
 export type OptionsTeamsGoals = 'awayTeamGoals' | 'homeTeamGoals';
+
+export interface InfoStatistics {
+  matchesSide: IMatchWithTeamNames[],
+  teamsGoalsFavor: OptionsTeamsGoals,
+  teamsGoalsOwn: OptionsTeamsGoals,
+}
