@@ -20,3 +20,5 @@ export interface InfosLeaderboard {
   teams: ITeam[],
   matchTeamSide: MatchTeamSide,
 }
+
+export type OptionsTeamsGoals = 'awayTeamGoals' | 'homeTeamGoals';

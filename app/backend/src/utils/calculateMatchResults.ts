@@ -1,17 +1,22 @@
+/* eslint-disable max-lines-per-function */
 import { IMatchWithTeamNames } from '../Interfaces/IMatches';
-import { ILeaderboard, InfosLeaderboard } from '../Interfaces/ILeaderboard';
+import { ILeaderboard, InfosLeaderboard,
+  MatchTeamSide, OptionsTeamsGoals } from '../Interfaces/ILeaderboard';
 
-export function calculateMatchStatistics(matchesIsSide: IMatchWithTeamNames[]) {
+export function matchStatistics(matchesSide: IMatchWithTeamNames[], matchTeamSide: MatchTeamSide) {
+  const teamsGoalsFavor = `${matchTeamSide}Goals` as OptionsTeamsGoals;
+  const teamsGoalsOwn = matchTeamSide === 'homeTeam' ? 'awayTeamGoals' : 'homeTeamGoals';
+
   let totalVictories = 0;
   let totalDraws = 0;
   let totalLosses = 0;
 
-  const totalPoints = matchesIsSide.reduce((total, match) => {
+  const totalPoints = matchesSide.reduce((total, match) => {
     let teamPoints = 0;
-    if (match.homeTeamGoals > match.awayTeamGoals) {
+    if (match[teamsGoalsFavor] > match[teamsGoalsOwn]) {
       teamPoints += 3;
       totalVictories += 1;
-    } else if (match.homeTeamGoals === match.awayTeamGoals) {
+    } else if (match[teamsGoalsFavor] === match[teamsGoalsOwn]) {
       teamPoints += 1;
       totalDraws += 1;
     } else {
@@ -20,13 +25,16 @@ export function calculateMatchStatistics(matchesIsSide: IMatchWithTeamNames[]) {
     return total + teamPoints;
   }, 0);
 
-  const efficiency = ((totalPoints / (matchesIsSide.length * 3)) * 100).toFixed(2);
+  const efficiency = ((totalPoints / (matchesSide.length * 3)) * 100).toFixed(2);
   return { totalVictories, totalDraws, totalLosses, totalPoints, efficiency };
 }
 
-export function calculateGoals(matchesIsSide: IMatchWithTeamNames[]) {
-  const goalsFavor = matchesIsSide.reduce((goals, match) => match.homeTeamGoals + goals, 0);
-  const goalsOwn = matchesIsSide.reduce((goals, match) => match.awayTeamGoals + goals, 0);
+export function calculateGoals(matchesIsSide: IMatchWithTeamNames[], matchTeamSide: MatchTeamSide) {
+  const teamsGoalsFavor = `${matchTeamSide}Goals` as OptionsTeamsGoals;
+  const teamsGoalsOwn = matchTeamSide === 'homeTeam' ? 'awayTeamGoals' : 'homeTeamGoals';
+
+  const goalsFavor = matchesIsSide.reduce((goals, match) => match[teamsGoalsFavor] + goals, 0);
+  const goalsOwn = matchesIsSide.reduce((goals, match) => match[teamsGoalsOwn] + goals, 0);
   const goalsBalance = goalsFavor - goalsOwn;
 
   return { goalsBalance, goalsOwn, goalsFavor };
@@ -36,21 +44,21 @@ export function calculateLeaderboard({ matchTeamSide, matches, teams }: InfosLea
   const leadboardhome = teams.map((team) => {
     const matchesIsSide = matches.filter((m) => m[matchTeamSide].teamName === team.teamName);
 
-    const matchStatistics = calculateMatchStatistics(matchesIsSide);
+    const matchStatistic = matchStatistics(matchesIsSide, matchTeamSide);
 
-    const matchGoals = calculateGoals(matchesIsSide);
+    const matchGoals = calculateGoals(matchesIsSide, matchTeamSide);
 
     return {
       name: team.teamName,
-      totalPoints: matchStatistics.totalPoints,
+      totalPoints: matchStatistic.totalPoints,
       totalGames: matchesIsSide.length,
-      totalVictories: matchStatistics.totalVictories,
-      totalDraws: matchStatistics.totalDraws,
-      totalLosses: matchStatistics.totalLosses,
+      totalVictories: matchStatistic.totalVictories,
+      totalDraws: matchStatistic.totalDraws,
+      totalLosses: matchStatistic.totalLosses,
       goalsFavor: matchGoals.goalsFavor,
       goalsOwn: matchGoals.goalsOwn,
       goalsBalance: matchGoals.goalsBalance,
-      efficiency: matchStatistics.efficiency,
+      efficiency: matchStatistic.efficiency,
     };
   });
 
