@@ -10,4 +10,9 @@ leaderboardRouter.get(
   (req: Request, res: Response) => leaderboardControllers.leaderboardSearchHome(req, res),
 );
 
+leaderboardRouter.get(
+  '/away',
+  (req: Request, res: Response) => leaderboardControllers.leaderboardSearchAway(req, res),
+);
+
 export default leaderboardRouter;

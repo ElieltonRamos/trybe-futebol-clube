@@ -1,13 +1,12 @@
-import ITeam from '../Interfaces/ITeam';
 import { IMatchWithTeamNames } from '../Interfaces/IMatches';
-import { ILeaderboardHome } from '../Interfaces/ILeaderboard';
+import { ILeaderboard, InfosLeaderboard } from '../Interfaces/ILeaderboard';
 
-export function calculateMatchStatistics(matchIsHome: IMatchWithTeamNames[]) {
+export function calculateMatchStatistics(matchesIsSide: IMatchWithTeamNames[]) {
   let totalVictories = 0;
   let totalDraws = 0;
   let totalLosses = 0;
 
-  const totalPoints = matchIsHome.reduce((total, match) => {
+  const totalPoints = matchesIsSide.reduce((total, match) => {
     let teamPoints = 0;
     if (match.homeTeamGoals > match.awayTeamGoals) {
       teamPoints += 3;
@@ -21,30 +20,30 @@ export function calculateMatchStatistics(matchIsHome: IMatchWithTeamNames[]) {
     return total + teamPoints;
   }, 0);
 
-  const efficiency = ((totalPoints / (matchIsHome.length * 3)) * 100).toFixed(2);
+  const efficiency = ((totalPoints / (matchesIsSide.length * 3)) * 100).toFixed(2);
   return { totalVictories, totalDraws, totalLosses, totalPoints, efficiency };
 }
 
-export function calculateGoals(matchIsHome: IMatchWithTeamNames[]) {
-  const goalsFavor = matchIsHome.reduce((goals, match) => match.homeTeamGoals + goals, 0);
-  const goalsOwn = matchIsHome.reduce((goals, match) => match.awayTeamGoals + goals, 0);
+export function calculateGoals(matchesIsSide: IMatchWithTeamNames[]) {
+  const goalsFavor = matchesIsSide.reduce((goals, match) => match.homeTeamGoals + goals, 0);
+  const goalsOwn = matchesIsSide.reduce((goals, match) => match.awayTeamGoals + goals, 0);
   const goalsBalance = goalsFavor - goalsOwn;
 
   return { goalsBalance, goalsOwn, goalsFavor };
 }
 
-export function calculateLeaderboardHome(matches: IMatchWithTeamNames[], teams: ITeam[]) {
+export function calculateLeaderboard({ matchTeamSide, matches, teams }: InfosLeaderboard) {
   const leadboardhome = teams.map((team) => {
-    const matchIsHome = matches.filter((match) => match.homeTeam.teamName === team.teamName);
+    const matchesIsSide = matches.filter((m) => m[matchTeamSide].teamName === team.teamName);
 
-    const matchStatistics = calculateMatchStatistics(matchIsHome);
+    const matchStatistics = calculateMatchStatistics(matchesIsSide);
 
-    const matchGoals = calculateGoals(matchIsHome);
+    const matchGoals = calculateGoals(matchesIsSide);
 
     return {
       name: team.teamName,
       totalPoints: matchStatistics.totalPoints,
-      totalGames: matchIsHome.length,
+      totalGames: matchesIsSide.length,
       totalVictories: matchStatistics.totalVictories,
       totalDraws: matchStatistics.totalDraws,
       totalLosses: matchStatistics.totalLosses,
@@ -58,7 +57,7 @@ export function calculateLeaderboardHome(matches: IMatchWithTeamNames[], teams: 
   return leadboardhome;
 }
 
-export function orderLeaderboard(leadboardHome: ILeaderboardHome[]) {
+export function orderLeaderboard(leadboardHome: ILeaderboard[]) {
   return leadboardHome.sort((a, b) => {
     if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
 

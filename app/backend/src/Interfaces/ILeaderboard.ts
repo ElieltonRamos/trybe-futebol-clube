@@ -1,4 +1,7 @@
-export type ILeaderboardHome = {
+import { IMatchWithTeamNames } from './IMatches';
+import ITeam from './ITeam';
+
+export type ILeaderboard = {
   name: string;
   totalPoints: number;
   totalGames: number;
@@ -9,3 +12,11 @@ export type ILeaderboardHome = {
   goalsOwn: number;
   goalsBalance: number;
 };
+
+export type MatchTeamSide = 'homeTeam' | 'awayTeam';
+
+export interface InfosLeaderboard {
+  matches: IMatchWithTeamNames[],
+  teams: ITeam[],
+  matchTeamSide: MatchTeamSide,
+}

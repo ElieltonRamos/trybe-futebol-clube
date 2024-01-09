@@ -16,6 +16,16 @@ class leaderboardController {
       return res.status(mapStatusHTTP('serverError')).send('Internal Server Error');
     }
   }
+
+  async leaderboardSearchAway(req: Request, res: Response) {
+    try {
+      const { status, data } = await this.leaderboardService.searchLeaderboardAway();
+      return res.status(mapStatusHTTP(status)).send(data);
+    } catch (erro) {
+      console.log(erro);
+      return res.status(mapStatusHTTP('serverError')).send('Internal Server Error');
+    }
+  }
 }
 
 export default leaderboardController;
