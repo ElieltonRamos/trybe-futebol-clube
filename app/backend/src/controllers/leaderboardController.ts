@@ -5,25 +5,36 @@ import LeaderboardServices from '../services/leaderboardService';
 class leaderboardController {
   constructor(
     private leaderboardService = new LeaderboardServices(),
+    private InternalError = 'Internal Server Error',
   ) { }
 
-  async leaderboardSearchHome(req: Request, res: Response) {
+  async leaderboardSearchHome(_req: Request, res: Response) {
     try {
       const { status, data } = await this.leaderboardService.searchLeaderboardHome();
       return res.status(mapStatusHTTP(status)).send(data);
     } catch (erro) {
       console.log(erro);
-      return res.status(mapStatusHTTP('serverError')).send('Internal Server Error');
+      return res.status(mapStatusHTTP('serverError')).send(this.InternalError);
     }
   }
 
-  async leaderboardSearchAway(req: Request, res: Response) {
+  async leaderboardSearchAway(_req: Request, res: Response) {
     try {
       const { status, data } = await this.leaderboardService.searchLeaderboardAway();
       return res.status(mapStatusHTTP(status)).send(data);
     } catch (erro) {
       console.log(erro);
-      return res.status(mapStatusHTTP('serverError')).send('Internal Server Error');
+      return res.status(mapStatusHTTP('serverError')).send(this.InternalError);
+    }
+  }
+
+  async leaderboardSearch(_req: Request, res: Response) {
+    try {
+      const { status, data } = await this.leaderboardService.searchLeaderboard();
+      return res.status(mapStatusHTTP(status)).send(data);
+    } catch (erro) {
+      console.log(erro);
+      return res.status(mapStatusHTTP('serverError')).send(this.InternalError);
     }
   }
 }

@@ -6,6 +6,11 @@ const leaderboardRouter = Router();
 const leaderboardControllers = new LeaderboardController();
 
 leaderboardRouter.get(
+  '/',
+  (req: Request, res: Response) => leaderboardControllers.leaderboardSearch(req, res),
+);
+
+leaderboardRouter.get(
   '/home',
   (req: Request, res: Response) => leaderboardControllers.leaderboardSearchHome(req, res),
 );

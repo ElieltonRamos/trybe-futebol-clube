@@ -1,4 +1,5 @@
-import { calculateLeaderboard, orderLeaderboard } from '../utils/calculateMatchResults';
+import { calculateLeaderboard,
+  generalLeaderboard, orderLeaderboard } from '../utils/calculateMatchResults';
 import { ILeaderboard, InfosLeaderboard } from '../Interfaces/ILeaderboard';
 import { ServiceResponse } from '../Interfaces/IServicesResponse';
 import MatchesModel from '../models/matchesModel';
@@ -42,6 +43,21 @@ class leaderboardService {
     const leadboardAway = calculateLeaderboard(statistics);
 
     const ordenedLeaderboard = orderLeaderboard(leadboardAway);
+
+    return { status: 'ok', data: ordenedLeaderboard };
+  }
+
+  async searchLeaderboard(): Promise<ServiceResponse<ILeaderboard[]>> {
+    const allMatches = await this.matchsModel.findAll();
+    const matches = allMatches.filter((match) => match.inProgress === false);
+    const teams = await this.teamsModel.findAll();
+
+    const leadboardHome = calculateLeaderboard({ matchTeamSide: 'homeTeam', teams, matches });
+    const leadboardAway = calculateLeaderboard({ matchTeamSide: 'awayTeam', teams, matches });
+
+    const leadboard = generalLeaderboard(leadboardHome, leadboardAway);
+
+    const ordenedLeaderboard = orderLeaderboard(leadboard);
 
     return { status: 'ok', data: ordenedLeaderboard };
   }

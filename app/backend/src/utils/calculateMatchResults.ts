@@ -84,3 +84,27 @@ export function orderLeaderboard(leadboardHome: ILeaderboard[]) {
     return 0;
   });
 }
+
+export function generalLeaderboard(leadboardHome: ILeaderboard[], leadboardAway: ILeaderboard[]) {
+  return leadboardHome.map((team) => {
+    const teamAway = leadboardAway.filter((t) => t.name === team.name)[0];
+
+    const totalGames = team.totalGames + teamAway.totalGames;
+    const totalPoints = team.totalPoints + teamAway.totalPoints;
+
+    const efficiency = ((totalPoints / (totalGames * 3)) * 100).toFixed(2);
+
+    return {
+      name: team.name,
+      totalPoints,
+      totalGames,
+      totalVictories: team.totalVictories + teamAway.totalVictories,
+      totalDraws: team.totalDraws + teamAway.totalDraws,
+      totalLosses: team.totalLosses + teamAway.totalLosses,
+      goalsFavor: team.goalsFavor + teamAway.goalsFavor,
+      goalsOwn: team.goalsOwn + teamAway.goalsOwn,
+      goalsBalance: team.goalsBalance + teamAway.goalsBalance,
+      efficiency,
+    };
+  });
+}
