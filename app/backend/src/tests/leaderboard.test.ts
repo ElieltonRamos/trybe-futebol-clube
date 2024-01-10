@@ -5,7 +5,7 @@ import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 
-import leaderboard from './mocks/leaderboardMock';
+import { leaderboardAway, leaderboardGeneral, leaderboardHome } from './mocks/leaderboardMock';
 import matchesModel from '../database/models/SequelizeMatchesModel';
 import matchesMock from './mocks/matchesMock';
 import SequelizeTeamsModel from '../database/models/SequelizeTeamsModel';
@@ -34,6 +34,38 @@ describe('Rotas relacionada ao leaderboard', () => {
     const { status, body } = await chai.request(app).get('/leaderboard/home');
 
     expect(status).to.be.equal(200);
-    expect(body).to.be.deep.equal(leaderboard)
+    expect(body).to.be.deep.equal(leaderboardHome)
+  })
+
+  it('Rota /away deve retornar o desenpenho dos times visitantes sem considerar partidas em andamento', async function () {
+    const allMatches = matchesModel.bulkBuild(matchesMock, {
+      include: [
+        { model: SequelizeTeamsModel, as: 'homeTeam' },
+        { model: SequelizeTeamsModel, as: 'awayTeam' }
+      ]
+    });
+    sinon.stub(TeamsModel, 'findAll').resolves(TeamsModel.bulkBuild(mockTeams));
+    sinon.stub(matchesModel, 'findAll').resolves(allMatches);
+    
+    const { status, body } = await chai.request(app).get('/leaderboard/away');
+
+    expect(status).to.be.equal(200);
+    expect(body).to.be.deep.equal(leaderboardAway)
+  })
+
+  it('Rota / deve retornar o desenpenho dos times visitantes sem considerar partidas em andamento', async function () {
+    const allMatches = matchesModel.bulkBuild(matchesMock, {
+      include: [
+        { model: SequelizeTeamsModel, as: 'homeTeam' },
+        { model: SequelizeTeamsModel, as: 'awayTeam' }
+      ]
+    });
+    sinon.stub(TeamsModel, 'findAll').resolves(TeamsModel.bulkBuild(mockTeams));
+    sinon.stub(matchesModel, 'findAll').resolves(allMatches);
+    
+    const { status, body } = await chai.request(app).get('/leaderboard');
+
+    expect(status).to.be.equal(200);
+    expect(body).to.be.deep.equal(leaderboardGeneral)
   })
 });
